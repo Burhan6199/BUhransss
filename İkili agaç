@@ -1,0 +1,100 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct n{
+	int data;
+	struct n *sol;
+	struct n *sag;
+};
+typedef struct n node;
+
+node *ekle(node *agac, int x){
+	if(agac==NULL){
+		node agac=(node)malloc(sizeof(node));
+		agac->sag=NULL;
+		agac->sol=NULL;
+		agac->data=x;
+		return agac;
+	}
+	if(agac->data<x){
+		agac->sag = ekle(agac->sag,x);
+			return agac;}	
+	agac->sol = ekle(agac->sol,x);
+	return agac;
+	
+}
+
+void dolas(node *agac){
+	if(agac==NULL)
+		return;
+	dolas(agac->sol);
+	printf("%d ",agac->data);
+	dolas(agac->sag);
+}
+
+int bul(node *agac, int aranan){
+	if(agac==NULL)
+		return -1;
+	if(agac->data==aranan)
+		return 1;
+	if(bul(agac->sag,aranan)==1)
+		return 1;
+	if(bul(agac->sol,aranan)==1)
+		return 1;
+	
+}
+
+int max(node *agac){
+	while(agac->sag!=NULL)
+		agac=agac->sag;
+	return agac->data;
+}
+
+int min(node *agac){
+	while(agac->sol!=NULL)
+		agac=agac->sol;
+	return agac->data;
+}
+
+node *sil(node *agac,int silinen){
+	if(agac==NULL)
+		return NULL;
+	if(agac->data==silinen){
+		if(agac->sag==NULL&&agac->sol==NULL)
+			return NULL;
+			}
+			if(agac->sag!=NULL){
+				agac->data=min(agac->sag);
+				agac->sag=sil(agac->sag,min(agac->sag));
+				return agac;
+			}
+			agac->data=max(agac->sol);
+			agac->sol=sil(agac->sol,max(agac->sol));
+			return agac;
+
+if(agac->data<silinen){
+	agac->sag=sil(agac->sag,silinen);
+	return agac;
+}
+agac->sol=sil(agac->sol,silinen);
+return agac; }
+int main(){
+	node *agac=NULL;
+	
+	agac=ekle(agac,9);
+	agac=ekle(agac,7);
+	agac=ekle(agac,5);
+	agac=ekle(agac,3);
+	agac=ekle(agac,1);
+	agac=ekle(agac,8);
+	agac=ekle(agac,6);
+	agac=ekle(agac,4);
+	sil(agac,8);
+	dolas(agac);
+	
+	printf("\n");
+	printf("%d\n",bul(agac,7));
+	printf("min : %d -- max :%d", min(agac),max(agac));
+	
+	
+}
